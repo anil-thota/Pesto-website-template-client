@@ -13,7 +13,24 @@
     <style>.ie-panel{display: none;background: #212121;padding: 10px 0;box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3);clear: both;text-align:center;position: relative;z-index: 1;} html.ie-10 .ie-panel, html.lt-ie-10 .ie-panel {display: block;}</style>
   </head>
   <body>
-    <div class="ie-panel"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
+    <div class="modal" id="projectIdModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Enter Project ID</h5>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="projectIdInput" class="form-control" placeholder="Enter Project ID" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="submitProjectId" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    <div id="mainContent" style="display: none;" class="page">
+      <div class="ie-panel"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
     <div class="preloader">
       <div class="preloader-body">
         <div class="cssload-container">
@@ -22,7 +39,6 @@
         <p>Loading...</p>
       </div>
     </div>
-    <div class="page">
       <!-- Page Header-->
       <header class="section page-header">
         <!-- RD Navbar-->
@@ -35,7 +51,7 @@
                   <!-- RD Navbar Toggle-->
                   <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
                   <!-- RD Navbar Brand-->
-                  <div class="rd-navbar-brand"><a href="index.html"><img class="brand-logo-light" src="images/logo-default1-140x57.png" alt="" width="140" height="57" srcset="images/logo-default-280x113.png 2x"/></a></div>
+                  <div class="rd-navbar-brand"><a href="index.html"><img class="dynamicLogo" src="images/logo-default1-140x57.png" alt="" width="140" height="57" /></a></div>
                 </div>
                 <div class="rd-navbar-main-element">
                   <div class="rd-navbar-nav-wrap">
@@ -121,13 +137,13 @@
           <div class="container">
             <div class="row row-50 justify-content-xl-between align-items-lg-center">
               <div class="col-lg-6 wow fadeInLeft">
-                <div class="box-image"><img class="box-image-static" src="images/home-3-1-483x327.jpg" alt="" width="483" height="327"/><img class="box-image-position" src="images/home-3-2-341x391.png" alt="" width="341" height="391"/>
+                <div class="box-image"><img class="box-image-static"  src="images/home-3-1-483x327.jpg" alt="" width="483" height="327"/><img class="box-image-position dynamicAboutUsImage" src="images/home-3-2-341x391.png" alt="" width="341" height="391"/>
                 </div>
               </div>
               <div class="col-lg-6 col-xl-5 wow fadeInRight">
-                <h2>About Us</h2>
-                <p>Pesto is a family owned and operated Italian Restaurant offering a combination of fresh ingredients and authentic Italian cooking.</p>
-                <p>We will make sure you are served the most authentic and fresh Italian dishes, while offering the best customer service. Our kitchen is committed to providing our guests with the best Italian Cuisine.</p><img src="images/signature-1-140x50.png" alt="" width="140" height="50"/>
+                <h2 >About Us</h2>
+                <h3 class="dynamicAboutUsHead">Pesto is a family .</h3>
+                <p class="dynamicAboutUsPara">We will make sure you are served the most authentic and fresh Italian dishes, while offering the best customer service. Our kitchen is committed to providing our guests with the best Italian Cuisine.</p><img src="images/signature-1-140x50.png" alt="" width="140" height="50"/>
               </div>
             </div>
           </div>
@@ -414,7 +430,7 @@
         <div class="container wow-outer">
           <div class="wow fadeIn">
             <div class="row row-60">
-              <div class="col-12"><a href="index.html"><img src="images/logo-default1-140x57.png" alt="" width="140" height="57" srcset="images/logo-default-280x113.png 2x"/></a></div>
+              <div class="col-12"><a href="index.html"><img class="dynamicLogo" src="images/logo-default1-140x57.png" alt="" width="140" height="57"/></a></div>
               <div class="col-12">
                 <ul class="footer-minimal-nav">
                   <li><a href="#">Menu</a></li>

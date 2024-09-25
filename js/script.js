@@ -154,8 +154,273 @@
 		}
 	});
 
+	var PROJECTID = "";
 
+// Document ready (DOMContentLoaded) function
+document.addEventListener("DOMContentLoaded", function () {
+    const THIRTY_MINUTES = 30 * 60 * 1000; // 30 minutes in milliseconds
+    const storedProjectId = localStorage.getItem('projectId');
+    const projectIdTimestamp = localStorage.getItem('projectIdTimestamp');
+    const now = new Date().getTime();
+
+    if (storedProjectId && projectIdTimestamp) {
+        const timeDiff = now - projectIdTimestamp;
+        if (timeDiff < THIRTY_MINUTES) {
+            PROJECTID = storedProjectId;
+            console.log("Valid session found, PROJECTID:", PROJECTID);
+            document.getElementById('projectIdModal').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            applyUpdates();
+        } else {
+            localStorage.removeItem('projectId');
+            localStorage.removeItem('projectIdTimestamp');
+            console.log("Session expired, clearing stored data.");
+        }
+    }
+
+    document.getElementById('submitProjectId').addEventListener('click', function (event) {
+        event.preventDefault();
+        const projectId = document.getElementById('projectIdInput').value;
+        if (!projectId) {
+            alert("Please enter a Project ID");
+            return;
+        }
+
+        fetch('http://localhost:3001/project')
+            .then(response => response.json())
+            .then(data => {
+                const projects = data.projects;
+                console.log("Projects data fetched:", projects);
+                const project = projects.find(proj => proj._id === projectId);
+
+                if (project) {
+                    localStorage.setItem('projectId', projectId);
+                    localStorage.setItem('projectIdTimestamp', new Date().getTime());
+                    PROJECTID = projectId;
+                    document.getElementById('projectIdModal').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'block';
+                    applyUpdates();
+                } else {
+                    alert("Please enter a valid Project ID");
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching project data:', error);
+                alert('There was an error fetching project data.');
+            });
+    });
+});
+
+function applyUpdates() {
+    updateLogo();
+    updateAddressDetails();
+	updateAboutSection();
+	updateCarouselSlides();
+	fetchAndDisplayGalleryProducts();
+   
+}
+
+
+function updateLogo() {
+	// Select all elements with the class 'dynamicLogo'
+	const logoElements = document.getElementsByClassName('dynamicLogo');
+	console.log(logoElements)
 	
+	// Check if elements exist
+	if (logoElements.length === 0) {
+	  console.error("No logo elements found");
+	  return;
+	}
+  
+	// Fetch the logo data from the API using the project ID
+	fetch(`http://localhost:3001/properties/${PROJECTID}/logo`)
+	  .then(response => response.json())
+	  .then(data => {
+		console.log("API Response:", data);
+  
+		// Check if the response contains a logo URL
+		if (data.logo) {
+		  // Loop through all logo elements and update their src attribute
+		  Array.from(logoElements).forEach(logoElement => {
+			logoElement.src = data.logo;
+		  });
+		} else {
+		  console.error('Logo URL not found in the response');
+		}
+	  })
+	  .catch(error => {
+		console.error('Error fetching the logo:', error);
+	  });
+}
+
+function updateAddressDetails() {
+	fetch(`http://localhost:3001/properties/${PROJECTID}/address`)
+		.then(response => response.json())
+		.then(data => {
+			if (data) {
+				// Log the address details for debugging
+				console.log('Address details:', data);
+
+				// Update phone number
+				var phoneElements = document.querySelectorAll('.link-phone');
+				phoneElements.forEach(element => {
+					element.textContent = data.contactNo;
+					element.href = `tel:${data.contactNo}`;
+				});
+
+				// Update email
+				var emailElements = document.querySelectorAll('.link-aemail');
+				emailElements.forEach(element => {
+					element.textContent = data.emailId;
+					element.href = `mailto:${data.emailId}`;
+				});
+
+				// Update location
+				var locationElements = document.querySelectorAll('.link-location');
+				locationElements.forEach(element => {
+					element.textContent = `${data.street}, ${data.city}, ${data.state}, ${data.pincode}`;
+				});
+			} else {
+				console.error('No address details found in the response');
+			}
+		})
+		.catch(error => {
+			console.error('Error fetching the address details:', error);
+		});
+}
+
+function updateAboutSection() {
+	// Fetching API data for the About Us section
+	fetch(`http://localhost:3001/properties/${PROJECTID}/about`)
+		.then(response => response.json())
+		
+		.then(data => {
+			console.log("About Section ",data)
+			// Assuming the response data is an array with a single object
+			const aboutData = data[0];
+
+			// Update the About Us image
+			const aboutImageElement = document.querySelector('.dynamicAboutUsImage');
+			aboutImageElement.src = aboutData.image;
+			aboutImageElement.alt = aboutData.title;
+
+			// Update the About Us heading
+			const aboutHeadingElement = document.querySelector('.dynamicAboutUsHead');
+			aboutHeadingElement.textContent = aboutData.title;
+
+			// Update the About Us paragraph
+			const aboutParagraphElement = document.querySelector('.dynamicAboutUsPara');
+			aboutParagraphElement.textContent = aboutData.description;
+			
+			// Optionally, adjust image dimensions (if necessary)
+			aboutImageElement.style.width = '546px';
+			aboutImageElement.style.height = '516px';
+		})
+		.catch(error => console.error('Error fetching about data:', error));
+}
+
+let swiperInstance = null;
+
+
+
+
+function updateCarouselSlides() {
+	fetch(`http://localhost:3001/properties/${PROJECTID}/banner`)
+	  .then(response => response.json())
+	  .then(data => {
+		if (data.banners && data.banners.length > 0) {
+		  const banner = data.banners[0]; // Assuming you want to use the first banner
+  
+		  const mainBannerImg = document.querySelector('.main-bunner-img');
+		  mainBannerImg.style.backgroundImage = `url(${banner.image})`;
+		  mainBannerImg.style.backgroundSize = 'cover';
+  
+		  // Optionally, update text or add additional banner information
+		  const bannerHeading = document.createElement('h1');
+		  bannerHeading.innerText = banner.heading;
+		  mainBannerImg.appendChild(bannerHeading);
+  
+		  // You can add more elements or adjust as per banner data
+		} else {
+		  console.error('No banners found in the response');
+		}
+	  })
+	  .catch(error => {
+		console.error('Error fetching the banner:', error);
+	  });
+  }
+  
+
+function fetchAndDisplayGalleryProducts() {
+    const apiUrl = `http://localhost:3001/properties/${PROJECTID}/product`;
+
+    // Fetch the product data from the API
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            // Filter the products to include only those with the category name "GALLERY"
+            const galleryProducts = data.allProducts.filter(item => item.category.name === 'GALLERY');
+
+            console.log("Gallery", galleryProducts);
+
+            // Get the container where thumbnails will be appended or updated
+            const container = document.querySelector('.gallery-container');
+
+            // Clear existing thumbnails (if needed)
+            container.innerHTML = '';
+
+            // Loop through the gallery products and create/update thumbnails
+            galleryProducts.forEach(product => {
+                // Create a new thumbnail element
+                const item = document.createElement('div');
+                item.classList.add('col-xs-12', 'col-sm-6', 'col-md-3', 'isotope-item', 'wow', 'fadeInUp');
+                item.dataset.filter = 'Category 1';
+
+                // Create a link element wrapping the thumbnail image
+                const linkElement = document.createElement('a');
+                linkElement.classList.add('portfolio-item', 'thumbnail-classic');
+                linkElement.href = product.images[0];
+                linkElement.dataset.size = '1200x800'; // Adjust size if needed
+                linkElement.dataset.lightgallery = 'item';
+
+                // Create and append the image element
+                const imageElement = document.createElement('img');
+                imageElement.src = product.images[0];
+                imageElement.alt = product.title;
+                imageElement.width = 420; // Adjust width and height as needed
+                imageElement.height = 278;
+
+                // Create and append the caption element
+                const captionElement = document.createElement('div');
+                captionElement.classList.add('caption');
+                const thumbsUp = document.createElement('span');
+                thumbsUp.classList.add('icon', 'mdi-thumb-up-outline');
+                thumbsUp.textContent = '346'; // Replace with actual data if available
+                const eyeIcon = document.createElement('span');
+                eyeIcon.classList.add('icon', 'mdi-eye');
+                eyeIcon.textContent = '220'; // Replace with actual data if available
+
+                captionElement.appendChild(thumbsUp);
+                captionElement.appendChild(eyeIcon);
+
+                // Assemble the thumbnail item
+                linkElement.appendChild(imageElement);
+                linkElement.appendChild(captionElement);
+                item.appendChild(linkElement);
+
+                // Append the new thumbnail to the container
+                container.appendChild(item);
+            });
+
+            // Initialize LightGallery or any other required plugins
+            // For example: lightGallery(container, {selector: '.portfolio-item'});
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+
 
 	// Initialize scripts that require a finished document
 	$(function () {
