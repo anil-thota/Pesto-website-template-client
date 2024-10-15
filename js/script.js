@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch('http://localhost:3001/project')
+        fetch('https://purple-backend-362176970036.asia-south1.run.app/project')
             .then(response => response.json())
             .then(data => {
                 const projects = data.projects;
@@ -237,7 +237,7 @@ function updateLogo() {
 	}
   
 	// Fetch the logo data from the API using the project ID
-	fetch(`http://localhost:3001/properties/${PROJECTID}/logo`)
+	fetch(`https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/logo`)
 	  .then(response => response.json())
 	  .then(data => {
 		console.log("API Response:", data);
@@ -258,7 +258,7 @@ function updateLogo() {
 }
 
 function updateAddressDetails() {
-	fetch(`http://localhost:3001/properties/${PROJECTID}/address`)
+	fetch(`https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/address`)
 		.then(response => response.json())
 		.then(data => {
 			if (data) {
@@ -295,7 +295,7 @@ function updateAddressDetails() {
 
 function updateAboutSection() {
 	// Fetching API data for the About Us section
-	fetch(`http://localhost:3001/properties/${PROJECTID}/about`)
+	fetch(`https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/about`)
 		.then(response => response.json())
 		
 		.then(data => {
@@ -329,7 +329,7 @@ let swiperInstance = null;
 
 
 function updateCarouselSlides() {
-	fetch(`http://localhost:3001/properties/${PROJECTID}/banner`)
+	fetch(`https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/banner`)
 	  .then(response => response.json())
 	  .then(data => {
 		if (data.banners && data.banners.length > 0) {
@@ -355,7 +355,7 @@ function updateCarouselSlides() {
   }
 
   function updateAboutUsBanner() {
-	const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
+	const apiUrl = `https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/banner`;
 
 	// Fetch banner data from the API using Fetch
 	fetch(apiUrl)
@@ -401,7 +401,7 @@ function updateCarouselSlides() {
 }
 
 function updateContactsBanner(){
-	const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
+	const apiUrl = `https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/banner`;
 	// Fetch banner data from the API using Fetch
 	fetch(apiUrl)
 	  .then(response => {
@@ -446,7 +446,7 @@ function updateContactsBanner(){
   }
 
   function updateTypographyBAnner(){
-	const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
+	const apiUrl = `https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/banner`;
 	// Fetch banner data from the API using Fetch
 	fetch(apiUrl)
 	  .then(response => {
@@ -491,7 +491,7 @@ function updateContactsBanner(){
   }
 
   function updateProductDetails() { 
-    fetch(`http://localhost:3001/properties/${PROJECTID}/product`)
+    fetch(`https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/product`)
       .then(response => response.json())
       .then(data => {
         if (data.allProducts && data.allProducts.length > 0) {
