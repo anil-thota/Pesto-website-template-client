@@ -334,17 +334,20 @@ function updateCarouselSlides() {
 	  .then(data => {
 		if (data.banners && data.banners.length > 0) {
 		  const banner = data.banners[0]; // Assuming you want to use the first banner
-  
+		  
+		  // Update the background image
 		  const mainBannerImg = document.querySelector('.main-bunner-img');
 		  mainBannerImg.style.backgroundImage = `url(${banner.image})`;
 		  mainBannerImg.style.backgroundSize = 'cover';
   
-		  // Optionally, update text or add additional banner information
-		  const bannerHeading = document.createElement('h1');
+		  // Update the heading
+		  const bannerHeading = document.querySelector('.box-default-title');
 		  bannerHeading.innerText = banner.heading;
-		  mainBannerImg.appendChild(bannerHeading);
   
-		  // You can add more elements or adjust as per banner data
+		  // Update the description (subHeading)
+		  const bannerDescription = document.querySelector('.box-default-text');
+		  bannerDescription.innerText = banner.subHeading;
+  
 		} else {
 		  console.error('No banners found in the response');
 		}
@@ -353,6 +356,7 @@ function updateCarouselSlides() {
 		console.error('Error fetching the banner:', error);
 	  });
   }
+  
 
   function updateAboutUsBanner() {
 	const apiUrl = `https://purple-backend-362176970036.asia-south1.run.app/properties/${PROJECTID}/banner`;
